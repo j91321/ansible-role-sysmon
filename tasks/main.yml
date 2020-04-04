@@ -1,0 +1,102 @@
+- name: Create installation directory
+  win_file:
+    path: "{{ sysmon_install_path }}"
+    state: directory
+
+- name: Check if sysmon is installed
+  win_service:
+    name: sysmon
+  register: sysmon_installed
+  ignore_errors: yes
+  when: ansible_architecture == "32-bit"
+
+- name: Check if sysmon64 is installed
+  win_service:
+    name: sysmon64
+  register: sysmon64_installed
+  ignore_errors: yes
+  when: ansible_architecture == "64-bit"
+
+- name: Check sysmon version in registry
+  win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\Sysmon
+    name: Version
+  register: sysmon_installed_version
+  when: ansible_architecture == "32-bit"
+
+- name: Check sysmon64 version in registry
+  win_reg_stat:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\Sysmon64
+    name: Version
+  register: sysmon64_installed_version
+  when: ansible_architecture == "64-bit"
+
+- name: Uninstall sysmon
+  win_command: sysmon -u
+  args:
+    chdir: "{{ sysmon_install_path }}"
+  when:
+    - ansible_architecture == "32-bit"  
+    - sysmon_installed.exists
+    - sysmon_installed_version.value|int < sysmon_version|int
+
+- name: Uninstall sysmon64
+  win_command: sysmon64 -u
+  args:
+    chdir: "{{ sysmon_install_path }}"
+  when:
+    - ansible_architecture == "64-bit"
+    - sysmon64_installed.exists
+    - sysmon64_installed_version.value|int < sysmon_version|int
+
+- name: Upload sysmon
+  win_copy:
+    src: files/Sysmon.exe
+    dest: "{{ sysmon_install_path }}\\Sysmon.exe"
+  force: yes
+  when:
+    - ansible_architecture == "32-bit"
+    - sysmon_installed.exists == False or sysmon_installed_version.value|int < sysmon_version|int
+
+- name: Upload sysmon64
+  win_copy:
+    src: files/Sysmon64.exe
+    dest: "{{ sysmon_install_path }}\\Sysmon64.exe"
+  force: yes
+  when: 
+    - ansible_architecture == "64-bit"
+    - sysmon64_installed.exists == False or sysmon64_installed_version.value|int < sysmon_version|int
+
+- name: Upload sysmon configuration
+  win_copy:
+    src: files/{{ sysmon_config }}
+    dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
+  notify: reload-sysmon
+  when: ansible_architecture == "32-bit"
+  tags: configure
+
+- name: Upload sysmon64 configuration
+  win_template:
+    src: {{ sysmon_config }}
+    dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
+  notify: reload-sysmon64
+  when: ansible_architecture == "64-bit"
+  tags: configure
+  
+- name: Install sysmon
+  win_command: sysmon -i -accepteula
+  args:
+    chdir: "{{ sysmon_install_path }}"
+  when:
+    - ansible_architecture == "32-bit"
+    - sysmon_installed.exists == False or sysmon_installed_version.value|int < sysmon_version|int
+  notify: restart-sysmon
+
+- name: Install sysmon64
+  win_command: sysmon64 -i -accepteula
+  args:
+    chdir: "{{ sysmon_install_path }}"
+  when:
+    - ansible_architecture == "64-bit"
+    - sysmon64_installed.exists == False or sysmon64_installed_version.value|int < sysmon_version|int
+  notify: restart-sysmon64
