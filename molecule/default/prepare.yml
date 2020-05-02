@@ -3,6 +3,5 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Wait for Windows to properly expose container port
-      pause:
-        minutes: 3    
+    - name: Wait for published winrm port to be available
+      wait_for_connection:    
