@@ -1,8 +1,9 @@
 ---
 galaxy_info:
-  author: your name
-  description: your description
-  company: your company (optional)
+  role_name: sysmon
+  author: Ján Trenčanský
+  description: Install Sysmon on Windows rules included
+  company:
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -15,9 +16,9 @@ galaxy_info:
   # - GPLv3
   # - Apache
   # - CC-BY
-  license: license (GPLv2, CC-BY, etc)
+  license: MIT
 
-  min_ansible_version: 1.2
+  min_ansible_version: 2.0
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:
@@ -33,11 +34,11 @@ galaxy_info:
   #
   # platforms is a list of platforms, and each platform has a name and a list of versions.
   #
-  # platforms:
-  # - name: Fedora
-  #   versions:
-  #   - all
-  #   - 25
+  platforms:
+    - name: Windows
+      versions:
+       - 2016
+       - 2019
   # - name: SomePlatform
   #   versions:
   #   - all
@@ -45,7 +46,12 @@ galaxy_info:
   #   - 7
   #   - 99.99
 
-  galaxy_tags: []
+  galaxy_tags:
+    - security
+    - windows
+    - logging
+    - monitoring
+    - sysmon
   # List tags for your role here, one per line. A tag is a keyword that describes
   # and categorizes the role. Users find roles by searching for tags. Be sure to
   # remove the '[]' above, if you add tags to this list.

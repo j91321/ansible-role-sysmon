@@ -3,16 +3,33 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
-  - name: instance
-    image: centos:7
+  - name: windows-os-base
+    image: windows-local/windows-os-base:latest
+    dockerfile: Dockerfile.j2
+    pull: False
+    docker_host: tcp://localhost:2375
+    command: ping -t localhost
+    #networks:
+            #- name: molecule-network
+        #ipv4_address: 172.18.0.22
+        #subnet: 172.18.0.0/24
+        #gateway: 172.18.0.1
+        #network_mode: transparent
+        #purge_networks: yes
+    published_ports:
+      - "5986:5986/tcp"
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  inventory:
+    host_vars:
+      windows-os-base:
+        ansible_host: 127.0.0.1
+        ansible_user: Administrator
+        ansible_password: Password123
+        ansible_connection: winrm
+        ansible_winrm_transport: basic
+        ansible_winrm_server_cert_validation: ignore
+        ansible_shell_type: powershell
 verifier:
-  name: testinfra
-  lint:
-    name: flake8
+  name: ansible

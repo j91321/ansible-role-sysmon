@@ -1,0 +1,8 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Wait for Windows to properly expose container port
+      pause:
+        minutes: 3    

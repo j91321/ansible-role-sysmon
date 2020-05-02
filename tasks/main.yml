@@ -36,7 +36,7 @@
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
-    - ansible_architecture == "32-bit"  
+    - ansible_architecture == "32-bit"
     - sysmon_installed.exists
     - sysmon_installed_version.value|int < sysmon_version|int
 
@@ -53,19 +53,19 @@
   win_copy:
     src: files/Sysmon.exe
     dest: "{{ sysmon_install_path }}\\Sysmon.exe"
-  force: yes
+    force: yes
   when:
     - ansible_architecture == "32-bit"
-    - sysmon_installed.exists == False or sysmon_installed_version.value|int < sysmon_version|int
+    - not sysmon_installed.exists or sysmon_installed_version.value|int < sysmon_version|int
 
 - name: Upload sysmon64
   win_copy:
     src: files/Sysmon64.exe
     dest: "{{ sysmon_install_path }}\\Sysmon64.exe"
-  force: yes
-  when: 
+    force: yes
+  when:
     - ansible_architecture == "64-bit"
-    - sysmon64_installed.exists == False or sysmon64_installed_version.value|int < sysmon_version|int
+    - not sysmon64_installed.exists or sysmon64_installed_version.value|int < sysmon_version|int
 
 - name: Upload sysmon configuration
   win_copy:
@@ -76,20 +76,20 @@
   tags: configure
 
 - name: Upload sysmon64 configuration
-  win_template:
-    src: {{ sysmon_config }}
+  win_copy:
+    src: files/{{ sysmon_config }}
     dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
   notify: reload-sysmon64
   when: ansible_architecture == "64-bit"
   tags: configure
-  
+
 - name: Install sysmon
   win_command: sysmon -i -accepteula
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "32-bit"
-    - sysmon_installed.exists == False or sysmon_installed_version.value|int < sysmon_version|int
+    - not sysmon_installed.exists or sysmon_installed_version.value|int < sysmon_version|int
   notify: restart-sysmon
 
 - name: Install sysmon64
@@ -98,5 +98,5 @@
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "64-bit"
-    - sysmon64_installed.exists == False or sysmon64_installed_version.value|int < sysmon_version|int
+    - not sysmon64_installed.exists or sysmon64_installed_version.value|int < sysmon_version|int
   notify: restart-sysmon64
