@@ -5,11 +5,11 @@
   win_shell: Restart-Service sysmon64
 
 - name: reload-sysmon
-  win_command: "{{ sysmon_install_location }}\\Sysmon.exe -c {{ sysmon_install_location }}\\sysmonconfig.xml"
+  win_command: "{{ sysmon_install_path }}\\Sysmon.exe -c {{ sysmon_install_path }}\\sysmonconfig.xml"
   args:
-    chdir: "{{ sysmon_install_location }}"
+    chdir: "{{ sysmon_install_path }}"
 
 - name: reload-sysmon64
-  win_command: "{{ sysmon_install_location }}\\Sysmon64.exe -c {{ sysmon_install_location }}\\sysmonconfig.xml"
+  win_command: "{{ sysmon_install_path }}\\Sysmon64.exe -c {{ sysmon_install_path }}\\sysmonconfig.xml"
   args:
-    chdir: "{{ sysmon_install_location }}"
+    chdir: "{{ sysmon_install_path }}"
