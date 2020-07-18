@@ -21,11 +21,9 @@ Ansible variables from defaults/main.yml
 
 ```
 sysmon_install_path: "C:\\Program Files\\Sysmon"
-sysmon_version: 1042
+sysmon_version: "11.11"
 sysmon_config: swiftonsecurity-sysmonconfig.xml
 ```
-
-The `sysmon_version` variable is used to keep track of which Sysmon version is currently installed. Role creates a registry entry in `HKLM:\SYSTEM\CurrentControlSet\Services\Sysmon` or `HKLM:\SYSTEM\CurrentControlSet\Services\Sysmon64` with key `Version` containing the variable value.
 
 Dependencies
 ------------
@@ -36,15 +34,18 @@ Example Playbook
 ----------------
 
 ```
-- name: Install sysmon to workstations
+- name: Install sysmon to winlogbeat group
   hosts:
-    - workstations:
+    - winlogbeat
   vars:
     sysmon_install_path: "C:\tools\Sysmon"
-    sysmon_version: 1042
-    sysmon_config: swiftonsecurity-sysmonconfig.xml
+    sysmon_version: "11.11"
+    sysmon_config: olafhartong-sysmonconfig.xml
   roles:
     - ansible-role-sysmon
+  post_tasks:
+    - name: Restart Winlogbeat
+      win_shell: Restart-Service winlogbeat
 ```
 
 
