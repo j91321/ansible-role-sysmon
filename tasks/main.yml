@@ -19,8 +19,8 @@
 
 - name: Check sysmon version
   win_file_version:
-    path: "C:\\WINDOWS\\sysmon.exe"
-  ignore_errors: True
+    path: "{{ sysmon_install_path }}\\Sysmon.exe"
+  ignore_errors: yes
   register: sysmon_installed_version
   when: 
     - ansible_architecture == "32-bit"
@@ -28,20 +28,12 @@
 
 - name: Check sysmon64 version
   win_file_version:
-    path: "C:\\WINDOWS\\sysmon64.exe"
-  ignore_errors: True
+    path: "{{ sysmon_install_path }}\\Sysmon64.exe"
+  ignore_errors: yes
   register: sysmon64_installed_version
   when: 
     - ansible_architecture == "64-bit"
     - sysmon64_installed.exists
-
-- name: DBG
-  debug:
-    msg: "Uninstall will be executed"
-  when:
-    - ansible_architecture == "64-bit"
-    - sysmon64_installed.exists
-    - sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
 
 - name: Uninstall sysmon
   win_command: sysmon -u
@@ -50,7 +42,7 @@
   when:
     - ansible_architecture == "32-bit"
     - sysmon_installed.exists
-    - sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
 
 - name: Uninstall sysmon64
   win_command: sysmon64 -u
@@ -59,7 +51,7 @@
   when:
     - ansible_architecture == "64-bit"
     - sysmon64_installed.exists
-    - sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
 
 - name: Upload sysmon
   win_copy:
@@ -68,7 +60,7 @@
     force: yes
   when:
     - ansible_architecture == "32-bit"
-    - not sysmon_installed.exists or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
 
 - name: Upload sysmon64
   win_copy:
@@ -77,7 +69,7 @@
     force: yes
   when:
     - ansible_architecture == "64-bit"
-    - not sysmon64_installed.exists or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
 
 - name: Upload sysmon configuration
   win_copy:
@@ -101,7 +93,7 @@
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "32-bit"
-    - not sysmon_installed.exists or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<')
   notify: restart-sysmon
 
 - name: Install sysmon64
@@ -110,5 +102,5 @@
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "64-bit"
-    - not sysmon64_installed.exists or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
+    - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<')
   notify: restart-sysmon64
