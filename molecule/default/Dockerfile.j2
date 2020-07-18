@@ -1,9 +1,0 @@
-FROM mcr.microsoft.com/windows:1903
-RUN powershell.exe -Command \
-    wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile c:\remoting.ps1; \
-    powershell.exe -ExecutionPolicy ByPass -File c:\remoting.ps1 ; \
-    $password = ConvertTo-SecureString "Password123" -AsPlainText -Force; \
-    Set-LocalUser -Name Administrator -Password $password; \
-    Enable-LocalUser -Name "Administrator"; \
-    Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
-EXPOSE 5986

@@ -1,7 +1,0 @@
----
-- name: Prepare
-  hosts: all
-  gather_facts: no
-  tasks:
-    - name: Wait for published winrm port to be available
-      wait_for_connection:    
