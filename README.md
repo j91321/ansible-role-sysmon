@@ -57,5 +57,5 @@ MIT
 Author Information
 ------------------
 
-j91321
-[viktor0x53](https://github.com/viktor0x53)
+- j91321
+- [viktor0x53](https://github.com/viktor0x53)
