@@ -21,8 +21,9 @@ jobs:
       - name: Prepare Administrator user
         run: |
           $password = ConvertTo-SecureString "Password123" -AsPlainText -Force
-          Set-LocalUser -Name Administrator -Password $password
-          Enable-LocalUser -Name "Administrator"
+          New-LocalUser "Ansible" -Password $password -Description "Ansible remoting user"
+          Add-LocalGroupMember -Group Administrators -Member Ansible
+          Enable-LocalUser -Name "Ansible"
         shell: powershell
       - name: Install Ansible
         shell: msys2 {0}
