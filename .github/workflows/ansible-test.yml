@@ -43,7 +43,7 @@ jobs:
       - name: Run Ansible playbook
         shell: msys2 {0}
         run: |
-          ansible-playbook -i ansible-role-sysmon/.github/scripts/inventory ansible-role-sysmon/.github/scripts/playbook.yml
+          ansible-playbook -i ansible-role-sysmon/.github/scripts/inventory ansible-role-sysmon/.github/scripts/playbook.yml -vvvv
       - name: Run test script
         run: .\ansible-role-sysmon\.github\scripts\sysmon_test.ps1
         shell: powershell
