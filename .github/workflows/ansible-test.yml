@@ -18,6 +18,15 @@ jobs:
         with:
           update: false
           install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel
+      - name: Get WinRM configuration
+        run: winrm enumerate winrm/config/Listener
+        shell: powershell
+      - name: Get firewall WinRM
+        run: Get-NetFirewallRule -Name 'WINRM*' | Select-Object Name
+        shell: powershell
+      - name: Get TrustedHosts
+        run: Get-Item WSMan:\localhost\Client\TrustedHosts
+        shell: powershell
       - name: Prepare Administrator user
         run: |
           $password = ConvertTo-SecureString "Password123" -AsPlainText -Force
