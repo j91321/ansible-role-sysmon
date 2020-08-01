@@ -8,3 +8,4 @@ if($OutputVariable -Match "No rules installed") {
 	Write-Output "No rules installed"
 	exit 1
 }
+Write-Output "Sysmon installed succesfully"

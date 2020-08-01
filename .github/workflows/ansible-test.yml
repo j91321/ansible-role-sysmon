@@ -8,7 +8,16 @@ on:
       branches: [ master ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run ansible-lint
+        run: ansible-lint .
+
   test:
+    needs: lint
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,18 +33,6 @@ jobs:
       - name: Run ConfigureRemotingForAnsible.ps1
         run: .\ConfigureRemotingForAnsible.ps1 -Verbose -GlobalHttpFirewallAccess -ForceNewSSLCert
         shell: powershell
-      - name: Get WinRM configuration
-        run: winrm enumerate winrm/config/Listener
-        shell: powershell
-      - name: Allow WinRM HTTPS on firewall
-        run: New-NetFirewallRule -DisplayName "Windows Remote Management (HTTPS-In)" -Name "WINRM (HTTPS-In)" -Profile Any -LocalPort 5986 -Protocol TCP
-        shell: powershell
-      - name: Get firewall WinRM
-        run: Get-NetFirewallRule -Name 'WINRM*' | Select-Object Name, Description
-        shell: powershell
-      - name: Get TrustedHosts
-        run: Get-Item WSMan:\localhost\Client\TrustedHosts
-        shell: powershell
       - name: Prepare Administrator user
         run: |
           $password = ConvertTo-SecureString "Password123" -AsPlainText -Force
@@ -46,13 +43,10 @@ jobs:
       - name: Install Ansible
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install ansible pywinrm
-      - name: Copy playbook to workspace
-        run: cp .\ansible-role-sysmon\.github\scripts\playbook.yml $GITHUB_WORKSPACE\playbook.yml
-        shell: powershell
       - name: Run Ansible playbook
         shell: msys2 {0}
         run: |
-          ansible-playbook -i ansible-role-sysmon/.github/scripts/inventory ansible-role-sysmon/.github/scripts/playbook.yml -vvvv
+          ansible-playbook -i ansible-role-sysmon/.github/scripts/inventory ansible-role-sysmon/.github/scripts/playbook.yml
       - name: Run test script
         run: .\ansible-role-sysmon\.github\scripts\sysmon_test.ps1
         shell: powershell
