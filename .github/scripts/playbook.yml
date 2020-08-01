@@ -1,0 +1,5 @@
+- name: Sysmon test playbook
+  hosts:
+    - localhost
+  roles:
+    - ansible-role-sysmon

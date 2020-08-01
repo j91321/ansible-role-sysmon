@@ -1,0 +1,1 @@
+localhost ansible_host=127.0.0.1 ansible_user=Ansible ansible_password=Password123 ansible_connection=winrm ansible_winrm_transport=basic ansible_winrm_server_cert_validation=ignore ansible_shell_type=powershell ansible_shell_executable=None
