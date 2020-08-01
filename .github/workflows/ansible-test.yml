@@ -1,0 +1,47 @@
+name: Test ansible role installation
+on:
+  push:
+    branches:
+      - "*"
+      - "!master"
+    pull_request:
+      branches: [ master ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: "ansible-role-sysmon"
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: false
+          install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel
+      - name: Download ConfigureRemotingForAnsible.ps1
+        run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
+        shell: powershell
+      - name: Run ConfigureRemotingForAnsible.ps1
+        run: .\ConfigureRemotingForAnsible.ps1
+        shell: powershell
+      - name: Prepare Administrator user
+        run: |
+          $password = ConvertTo-SecureString "Password123" -AsPlainText -Force
+          Set-LocalUser -Name Administrator -Password $password
+          Enable-LocalUser -Name "Administrator"
+        shell: powershell
+      - name: Install Ansible
+        shell: msys2 {0}
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install ansible pywinrm
+      - name: Copy playbook to workspace
+        run: cp .\ansible-role-sysmon\.github\scripts\playbook.yml $GITHUB_WORKSPACE\playbook.yml
+        shell: powershell
+      - name: Run Ansible playbook
+        shell: msys2 {0}
+        run:|
+          ansible-playbook -i ansible-role-sysmon/.github/scripts/inventory playbook.yml
+      - name: Run test script
+        run: .\ansible-role-sysmon\.github\scripts\sysmon_test.ps1
+        shell: powershell
+
+
