@@ -22,7 +22,7 @@ jobs:
         run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
         shell: powershell
       - name: Run ConfigureRemotingForAnsible.ps1
-        run: .\ConfigureRemotingForAnsible.ps1 -GlobalHttpFirewallAccess
+        run: .\ConfigureRemotingForAnsible.ps1 -Verbose -GlobalHttpFirewallAccess
         shell: powershell
       - name: Prepare Administrator user
         run: |
