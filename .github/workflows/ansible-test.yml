@@ -21,8 +21,11 @@ jobs:
       - name: Get WinRM configuration
         run: winrm enumerate winrm/config/Listener
         shell: powershell
+      - name: Allow WinRM HTTPS on firewall
+        run: New-NetFirewallRule -DisplayName "Windows Remote Management (HTTPS-In)" -Name "WINRM (HTTPS-In)" -Profile Any -LocalPort 5986 -Protocol TCP
+        shell: powershell
       - name: Get firewall WinRM
-        run: Get-NetFirewallRule -Name 'WINRM*' | Select-Object Name
+        run: Get-NetFirewallRule -Name 'WINRM*' | Select-Object Name, Description
         shell: powershell
       - name: Get TrustedHosts
         run: Get-Item WSMan:\localhost\Client\TrustedHosts
