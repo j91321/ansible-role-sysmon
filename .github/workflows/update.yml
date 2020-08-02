@@ -1,5 +1,7 @@
 name: Update config
-on: push
+on:
+  schedule:
+    - cron: '0 */24 * * *'
 jobs:
   createPullRequest:
     runs-on: ubuntu-latest
