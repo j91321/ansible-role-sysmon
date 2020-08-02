@@ -54,5 +54,3 @@ jobs:
       - name: Run test script
         run: .\ansible-role-sysmon\.github\scripts\sysmon_test.ps1
         shell: powershell
-
-

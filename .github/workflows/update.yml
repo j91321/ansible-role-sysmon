@@ -1,0 +1,47 @@
+name: Update config
+on:
+  schedule:
+    - cron: '0 */24 * * *'
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: 'ansible-role-sysmon'
+      - uses: actions/checkout@v2
+        with:
+          repository: 'olafhartong/sysmon-modular'
+          path: 'sysmon-modular'
+      - uses: actions/checkout@v2
+        with:
+          repository: 'SwiftOnSecurity/sysmon-config'
+          path: 'sysmon-config'
+      - name: Update Sysmon Configs
+        run: |
+          cp ./sysmon-modular/sysmonconfig.xml ./ansible-role-sysmon/files/olafhartong-sysmonconfig.xml
+          cp ./sysmon-config/sysmonconfig-export.xml ./ansible-role-sysmon/files/swiftonsecurity-sysmonconfig.xml
+        shell: bash
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ansible-role-sysmon
+          commit-message: Update sysmon configs
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: auto-updates
+          title: '[Config] Update sysmon configs'
+          body: |
+            Automatic update of bundled sysmon configs
+          labels: |
+            automated pr
+            config
+          assignees: j91321
+          reviewers: j91321
+          draft: false
+      - name: Check output
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
