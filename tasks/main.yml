@@ -57,14 +57,35 @@
   win_get_url:
     url: "https://download.sysinternals.com/files/Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\Sysmon.zip"
-  when: not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
+  when:
+    - ansible_architecture == "32-bit"
+    - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: Unzip Sysmon
   win_unzip:
     src: "{{ sysmon_install_path }}\\Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\"
     delete_archive: yes
-  when: not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
+  when:
+    - ansible_architecture == "32-bit"
+    - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
+
+- name: Download Sysmon64
+  win_get_url:
+    url: "https://download.sysinternals.com/files/Sysmon.zip"
+    dest: "{{ sysmon_install_path }}\\Sysmon.zip"
+  when:
+    - ansible_architecture == "64-bit"
+    - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
+
+- name: Unzip Sysmon64
+  win_unzip:
+    src: "{{ sysmon_install_path }}\\Sysmon.zip"
+    dest: "{{ sysmon_install_path }}\\"
+    delete_archive: yes
+  when:
+    - ansible_architecture == "64-bit"
+    - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: Upload sysmon configuration
   win_copy:
