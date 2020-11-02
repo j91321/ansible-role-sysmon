@@ -29,7 +29,7 @@ jobs:
           path: "ansible-role-sysmon"
       - uses: msys2/setup-msys2@v2
         with:
-          update: false
+          update: true
           install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel
       - name: Download ConfigureRemotingForAnsible.ps1
         run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
