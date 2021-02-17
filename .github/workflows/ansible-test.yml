@@ -46,7 +46,7 @@ jobs:
         shell: powershell
       - name: Update pip
         shell: msys2 {0}
-        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install –upgrade pip
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install --upgrade pip
       - name: Install Ansible
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install ansible pywinrm
