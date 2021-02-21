@@ -30,7 +30,7 @@ jobs:
       - uses: msys2/setup-msys2@v2
         with:
           update: true
-          install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel mingw-w64-x86_64-rust
+          install: base-devel git gcc msys2-devel python3 python3-pip libcrypt libcrypt-devel openssl openssl-devel mingw-w64-x86_64-rust
       - name: Download ConfigureRemotingForAnsible.ps1
         run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
         shell: powershell
