@@ -49,7 +49,7 @@ jobs:
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install --upgrade pip setuptools
       - name: Install Ansible
         shell: msys2 {0}
-        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install setuptools-rust ansible pywinrm
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install wheel setuptools-rust ansible pywinrm
       - name: Run Ansible playbook
         shell: msys2 {0}
         run: |
