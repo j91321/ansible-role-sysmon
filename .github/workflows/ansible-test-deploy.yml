@@ -41,9 +41,12 @@ jobs:
           Add-LocalGroupMember -Group Administrators -Member Ansible
           Enable-LocalUser -Name "Ansible"
         shell: powershell
+      - name: Update pip and setuptools
+        shell: msys2 {0}
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install --upgrade pip setuptools
       - name: Install Ansible
         shell: msys2 {0}
-        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install ansible pywinrm
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip cryptography==3.3.2 wheel install ansible pywinrm
       - name: Run Ansible playbook
         shell: msys2 {0}
         run: |
