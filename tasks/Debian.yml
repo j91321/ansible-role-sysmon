@@ -1,0 +1,58 @@
+---
+- name: (Debian/Ubuntu) Collect service facts
+  service_facts:
+
+- name: (Debian/Ubuntu) Install dependencies
+  apt:
+    name:
+      - gnupg
+      - apt-transport-https
+    state: present
+
+- name: (Ubuntu) Download and install Microsoft repository from deb package
+  apt:
+    deb: https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb
+  tags: install
+  when: ansible_distribution == "Ubuntu"
+
+- name: (Debian) Add Microsoft repository GPG key
+  apt_key:
+    url: "https://packages.microsoft.com/keys/microsoft.asc"
+    state: present
+  tags: install
+  when: ansible_distribution == "Debian"
+
+- name: (Debian) Add Microsoft repository
+  apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_lsb.id|lower }}/prod {{ ansible_lsb.codename|lower }} main
+    filename: microsoft-prod.list
+    state: present
+  tags: install
+  when: ansible_distribution == "Debian"
+
+- name: (Debian/Ubuntu) Install Sysmonforlinux package
+  apt:
+    name: sysmonforlinux
+    update_cache: yes
+    state: present
+  tags: install
+
+- name: (Debian/Ubuntu) Create Sysmon directory
+  file:
+    path: /etc/sysmon
+    state: directory
+  tags: install
+
+- name: (Debian/Ubuntu) Upload sysmon configuration
+  copy:
+    src: files/{{ sysmon_linux_config }}
+    dest: "/etc/config.xml"
+    owner: root
+    group: root
+    mode: '0600'
+  notify: reload-linux-sysmon
+  tags: configure
+
+- name: (Debian/Ubuntu) Install sysmon
+  command: sysmon -i /etc/config.xml -accepteula
+  when: ansible_facts.services['sysmon.service'] is not defined

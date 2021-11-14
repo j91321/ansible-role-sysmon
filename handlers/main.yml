@@ -13,3 +13,7 @@
   win_command: "\"{{ sysmon_install_path }}\\Sysmon64.exe\" -c \"{{ sysmon_install_path }}\"\\sysmonconfig.xml"
   args:
     chdir: "{{ sysmon_install_path }}"
+
+- name: reload-linux-sysmon
+  command:
+    cmd: sysmon -c /etc/config.xml
