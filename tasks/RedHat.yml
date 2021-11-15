@@ -6,7 +6,7 @@
   when: ansible_distribution == 'CentOS'
   tags: install
 
-- name: (REHL) Add Microsoft repository
+- name: (RHEL) Add Microsoft repository
   yum_repository:
     name: "packages-microsoft-com-prod"
     description: "Microsoft repository"
@@ -17,7 +17,7 @@
   when: ansible_distribution == 'Red Hat Enterprise Linux'
   tags: install
 
-- name: (REHL/CentOS) Install sysmonforlinux package
+- name: (RHEL/CentOS) Install sysmonforlinux package
   yum:
     name: sysmonforlinux
     state: present
