@@ -48,7 +48,6 @@ galaxy_info:
       versions:
         - bionic
         - focal
-        - hirsute
     - name: EL
       versions:
         - 7
