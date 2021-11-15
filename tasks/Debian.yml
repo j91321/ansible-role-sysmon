@@ -1,7 +1,4 @@
 ---
-- name: (Debian/Ubuntu) Collect service facts
-  service_facts:
-
 - name: (Debian/Ubuntu) Install dependencies
   apt:
     name:
@@ -24,7 +21,7 @@
 
 - name: (Debian) Add Microsoft repository
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_lsb.id|lower }}/prod {{ ansible_lsb.codename|lower }} main
+    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_distribution_major_version }}/prod {{ ansible_distribution_release|lower }} main
     filename: microsoft-prod.list
     state: present
   tags: install
@@ -36,23 +33,3 @@
     update_cache: yes
     state: present
   tags: install
-
-- name: (Debian/Ubuntu) Create Sysmon directory
-  file:
-    path: /etc/sysmon
-    state: directory
-  tags: install
-
-- name: (Debian/Ubuntu) Upload sysmon configuration
-  copy:
-    src: files/{{ sysmon_linux_config }}
-    dest: "/etc/config.xml"
-    owner: root
-    group: root
-    mode: '0600'
-  notify: reload-linux-sysmon
-  tags: configure
-
-- name: (Debian/Ubuntu) Install sysmon
-  command: sysmon -i /etc/config.xml -accepteula
-  when: ansible_facts.services['sysmon.service'] is not defined

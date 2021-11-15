@@ -1,0 +1,25 @@
+- name: (Linux) Collect service facts
+  service_facts:
+
+- name: (Linux) Create Sysmon directory
+  file:
+    path: /etc/sysmon
+    mode: '0755'
+    owner: root
+    group: root
+    state: directory
+  tags: install
+
+- name: (Linux) Upload sysmon configuration
+  copy:
+    src: files/{{ sysmon_linux_config }}
+    dest: "/etc/sysmon/config.xml"
+    owner: root
+    group: root
+    mode: '0600'
+  notify: reload-linux-sysmon
+  tags: configure
+
+- name: (Linux) Install sysmon
+  command: sysmon -i /etc/sysmon/config.xml -accepteula
+  when: ansible_facts.services['sysmon.service'] is not defined

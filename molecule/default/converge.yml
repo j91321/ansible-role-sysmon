@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    sysmon_linux_config: testlinux.xml
+  roles:
+    - role: ansible-role-sysmon

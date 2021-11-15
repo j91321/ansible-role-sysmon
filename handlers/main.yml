@@ -16,4 +16,4 @@
 
 - name: reload-linux-sysmon
   command:
-    cmd: sysmon -c /etc/config.xml
+    cmd: sysmon -c /etc/sysmon/config.xml
