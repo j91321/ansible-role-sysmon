@@ -1,0 +1,25 @@
+---
+- name: (CentOS) Add Microsoft repository
+  yum:
+    name: https://packages.microsoft.com/config/centos/{{ ansible_distribution_major_version }}/packages-microsoft-prod.rpm
+    state: present
+  when: ansible_distribution == 'CentOS'
+  tags: install
+
+- name: (RHEL) Add Microsoft repository
+  yum_repository:
+    name: "packages-microsoft-com-prod"
+    description: "Microsoft repository"
+    baseurl: https://packages.microsoft.com/rhel/{{ ansible_distribution_major_version }}/prod/
+    gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
+    state: present
+  notify: yum-clean-metadata
+  when: ansible_distribution == 'Red Hat Enterprise Linux'
+  tags: install
+
+- name: (RHEL/CentOS) Install sysmonforlinux package
+  yum:
+    name: sysmonforlinux
+    state: present
+  when: ansible_os_family == "RedHat"
+  tags: install

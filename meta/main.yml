@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: sysmon
   author: Ján Trenčanský
-  description: Install Sysmon on Windows rules included
+  description: Install Sysmon on Windows and Linux. Rulesets included.
   company:
 
   # If the issue tracker for your role is not on github, uncomment the
@@ -39,6 +39,17 @@ galaxy_info:
       versions:
        - 2016
        - 2019
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+    - name: EL
+      versions:
+        - 8
   # - name: SomePlatform
   #   versions:
   #   - all

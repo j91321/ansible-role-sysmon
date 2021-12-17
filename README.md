@@ -8,11 +8,18 @@ ansible-role-sysmon
 
 An Ansible role that installs Sysmon with selected configuration. Included configurations are [SwiftOnSecurity sysmon config](https://github.com/SwiftOnSecurity/sysmon-config) or [olafhartong sysmon-modular config](https://github.com/olafhartong/sysmon-modular). You can also supply your own config.
 
+Currently there are no configurations included for Linux. You must supply your own if you wish to use this role on Linux hosts.
+
 Supported platforms:
 
 - Windows 10
 - Windows Server 2019
 - Windows Server 2016
+- Debian 10
+- Debian 11
+- Ubuntu 18.04
+- Ubuntu 20.04
+- RHEL/CentOS 8
 
 Requirements
 ------------
@@ -28,6 +35,7 @@ Ansible variables from defaults/main.yml
 sysmon_install_path: "C:\\Program Files\\Sysmon"
 sysmon_version: "11.11"
 sysmon_config: swiftonsecurity-sysmonconfig.xml
+sysmon_linux_config: linux_sysmonconfig.xml
 ```
 
 Dependencies
@@ -35,24 +43,22 @@ Dependencies
 
 None
 
-Example Playbook
+Example Playbook Windows
 ----------------
 
 ```
-- name: Install sysmon to winlogbeat group
+- name: Install Sysmon
   hosts:
-    - winlogbeat
+    - windows_host
+    - linux_host
   vars:
     sysmon_install_path: "C:\tools\Sysmon"
-    sysmon_version: "11.11"
+    sysmon_version: "13.30"
     sysmon_config: olafhartong-sysmonconfig.xml
+    sysmon_linux_config: linux-sysmonconfig.xml
   roles:
     - ansible-role-sysmon
-  post_tasks:
-    - name: Restart Winlogbeat
-      win_shell: Restart-Service winlogbeat
 ```
-
 
 License
 -------

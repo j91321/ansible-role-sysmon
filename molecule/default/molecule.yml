@@ -1,0 +1,25 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  ansible-lint
+platforms:
+  - name: ${image:-ubuntu1804}-instance
+    image: ${namespace:-geerlingguy}/docker-${image:-ubuntu1804}-ansible:${tag:-latest}
+    pid_mode: host
+    capabilities:
+      - AUDIT_CONTROL
+      - AUDIT_READ
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

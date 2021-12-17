@@ -1,0 +1,35 @@
+---
+- name: (Debian/Ubuntu) Install dependencies
+  apt:
+    name:
+      - gnupg
+      - apt-transport-https
+    state: present
+
+- name: (Ubuntu) Download and install Microsoft repository from deb package
+  apt:
+    deb: https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb
+  tags: install
+  when: ansible_distribution == "Ubuntu"
+
+- name: (Debian) Add Microsoft repository GPG key
+  apt_key:
+    url: "https://packages.microsoft.com/keys/microsoft.asc"
+    state: present
+  tags: install
+  when: ansible_distribution == "Debian"
+
+- name: (Debian) Add Microsoft repository
+  apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_distribution_major_version }}/prod {{ ansible_distribution_release|lower }} main
+    filename: microsoft-prod.list
+    state: present
+  tags: install
+  when: ansible_distribution == "Debian"
+
+- name: (Debian/Ubuntu) Install Sysmonforlinux package
+  apt:
+    name: sysmonforlinux
+    update_cache: yes
+    state: present
+  tags: install

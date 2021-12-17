@@ -1,0 +1,52 @@
+<Sysmon schemaversion="4.70">
+  <EventFiltering>
+    <RuleGroup name="" groupRelation="or">
+            <ProcessCreate onmatch="exclude">
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/groups</Image>
+          <ParentImage condition="is">/usr/bin/bash</ParentImage>
+        </Rule>
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/locale-check</Image>
+          <ParentImage condition="is">/usr/bin/bash</ParentImage>
+        </Rule>
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/dircolors</Image>
+          <ParentImage condition="is">/usr/bin/bash</ParentImage>
+        </Rule>
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/mesg</Image>
+          <ParentImage condition="is">/usr/bin/bash</ParentImage>
+        </Rule>
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/dirname</Image>
+          <CommandLine condition="is">dirname /usr/bin/lesspipe</CommandLine>
+        </Rule>
+        <Rule name="" groupRelation="and">
+          <Image condition="is">/usr/bin/basename</Image>
+          <ParentImage condition="is">/usr/bin/dash</ParentImage>
+        </Rule>
+      </ProcessCreate>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+       <NetworkConnect onmatch="exclude">
+       <Image condition="is">/usr/lib/systemd/systemd-timesyncd</Image>
+      </NetworkConnect>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <ProcessTerminate onmatch="exclude"/>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <RawAccessRead onmatch="include"/>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <ProcessAccess onmatch="exclude"/>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <FileCreate onmatch="exclude"/>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <FileDelete onmatch="exclude"/>
+    </RuleGroup>    
+  </EventFiltering>
+</Sysmon>
