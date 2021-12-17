@@ -17,7 +17,30 @@ jobs:
         with:
           targets: "ansible-role-sysmon"
 
-  test:
+  test-linux:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - centos8
+          - ubuntu1804
+          - ubuntu2004
+          - debian10
+          - debian11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: Run molecule tests
+        uses: robertdebock/molecule-action@2.6.1
+        with:
+          image: "${{ matrix.image }}"
+          namespace: geerlingguy
+
+  test-windows:
     needs: lint
     runs-on: windows-latest
     steps:
@@ -56,7 +79,7 @@ jobs:
         shell: powershell
        
   deploy:
-    needs: test
+    needs: [test-windows, test-linux]
     runs-on: ubuntu-latest
     steps:
       - name: Publish on Ansible Galaxy

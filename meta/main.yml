@@ -41,7 +41,6 @@ galaxy_info:
        - 2019
     - name: Debian
       versions:
-        - stretch
         - buster
         - bullseye
     - name: Ubuntu
@@ -50,7 +49,6 @@ galaxy_info:
         - focal
     - name: EL
       versions:
-        - 7
         - 8
   # - name: SomePlatform
   #   versions:

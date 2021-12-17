@@ -27,11 +27,9 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - centos7
           - centos8
           - ubuntu1804
           - ubuntu2004
-          - debian9
           - debian10
           - debian11
     steps:
