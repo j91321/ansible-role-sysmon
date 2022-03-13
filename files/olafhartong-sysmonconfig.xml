@@ -767,10 +767,15 @@
         <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">22</DestinationPort>
         <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">23</DestinationPort>
         <DestinationPort name="technique_id=T1043,technique_name=Commonly Used Port" condition="is">25</DestinationPort>
-        <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">88</DestinationPort>
+        <Rule groupRelation="and">
+          <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">88</DestinationPort>
+          <Image condition="is not">C:\Windows\System32\lsass.exe</Image>
+        </Rule>
         <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">3389</DestinationPort>
         <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">5800</DestinationPort>
         <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">5900</DestinationPort>
+        <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">5985</DestinationPort>
+        <DestinationPort name="technique_id=T1021,technique_name=Remote Services" condition="is">5986</DestinationPort>
         <Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexec.exe</Image>
         <Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexesvc.exe</Image>
         <Image name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users</Image>
@@ -1125,7 +1130,7 @@
         </Rule>
         <Rule groupRelation="and">
           <CallTrace name="technique_id=T1055.001,technique_name=Dynamic-link Library Injection" condition="contains all">C:\Windows\SYSTEM32\ntdll.dll;C:\Windows\System32\kernelbase.dll;UNKNOWN</CallTrace>
-          <GrantedAccess name="technique_id=T1055.001,technique_name=Dynamic-link Library Injection" condition="contains any">0x1F0FFF;0x1F1FFF;0x143A;0x1410;0x1010;0x1F2FFF;0x1F3FFF;0x1FFFFF</GrantedAccess>
+          <GrantedAccess name="technique_id=T1055.001,technique_name=Dynamic-link Library Injection" condition="contains any">0x1F0FFF;0x1F1FFF;0x143A;0x1410;0x1010;0x1F2FFF;0x1F3FFF;0x1FFFFF;0x147A</GrantedAccess>
         </Rule>
         <GrantedAccess name="technique_id=T1093,technique_name=Process Hollowing">0x0800</GrantedAccess>
         <GrantedAccess name="technique_id=T1003,technique_name=Credential Dumping">0x0810</GrantedAccess>
@@ -1430,7 +1435,7 @@
         <TargetObject condition="begin with">hklm\system\mounteddevices\</TargetObject>
         <TargetObject condition="contains all">hklm\system\;\enum\usb\</TargetObject>
         <TargetObject name="technique_id=T1546.007,technique_name=Netsh Helper DLL" condition="contains">SOFTWARE\Microsoft\Netsh</TargetObject>
-        <TargetObject name="technique_id=T1137.006,technique_name=Office Add-ins" condition="contains">\Microsoft\Office\Outlook\Addins</TargetObject>
+        <TargetObject name="technique_id=T1137.006,technique_name=Office Add-ins" condition="contains all">\Microsoft\Office;\Outlook\Addins</TargetObject>
         <TargetObject name="technique_id=T1137.006,technique_name=Office Add-ins" condition="contains">\Software\Microsoft\VSTO\Security\Inclusion</TargetObject>
         <TargetObject name="technique_id=T1137.006,technique_name=Office Add-ins" condition="contains">\Software\Microsoft\VSTO\SolutionMetadata</TargetObject>
         <TargetObject name="technique_name=Outlook Server 95/98 Identity Keys" condition="contains">Identities</TargetObject>
@@ -1452,6 +1457,7 @@
         <TargetObject condition="contains all">hkcu\software\microsoft\office\;\word\options\globaldotname</TargetObject>
         <TargetObject condition="contains all">hkcu\software\microsoft\office\16.0\common\internet\server cache\</TargetObject>
         <TargetObject condition="contains">\Security\Trusted Documents\TrustRecords</TargetObject>
+        <TargetObject condition="contains">\Security\Trusted Documents\</TargetObject>
         <TargetObject condition="end with">\UrlUpdateInfo</TargetObject>
         <TargetObject condition="begin with">hkcu\software\microsoft\windows\currentversion\explorer\recentdocs\.docx\</TargetObject>
         <TargetObject condition="begin with">hkcu\software\microsoft\windows\currentversion\explorer\recentdocs\.xlsx\</TargetObject>
@@ -1459,6 +1465,7 @@
         <TargetObject condition="begin with">HKLM\SOFTWARE\Clients\Mail\Microsoft Outlook\DllPathEx</TargetObject>
         <TargetObject condition="contains">software\microsoft\Office test\special\perf\</TargetObject>
         <TargetObject condition="contains all">hkcu\software\microsoft\office\;\Options\OPEN</TargetObject>
+        <TargetObject name="technique_id=T1137.006,technique_name=Office Add-ins" condition="contains all">\Microsoft\Office;\PowerPoint\Addins</TargetObject>
         <TargetObject name="T1559.002,office" condition="end with">\Word\Security\AllowDDE</TargetObject>
         <TargetObject name="T1559.002,office" condition="end with">\Excel\Security\DisableDDEServerLaunch</TargetObject>
         <TargetObject name="T1559.002,office" condition="end with">\Excel\Security\DisableDDEServerLookup</TargetObject>
@@ -1474,6 +1481,7 @@
         <TargetObject name="technique_id=T1112,technique_name=Modify Registry" condition="begin with">HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Shadow</TargetObject>
         <TargetObject name="technique_id=T1053,technique_name=Scheduled Task" condition="contains all">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks;Actions</TargetObject>
         <TargetObject name="technique_id=T1053,technique_name=Scheduled Task" condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree</TargetObject>
+        <TargetObject name="technique_id=T1053,technique_name=Scheduled Task" condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\</TargetObject>
         <TargetObject name="technique_id=T1547.005,technique_name=Security Support Provider" condition="contains">SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe</TargetObject>
         <TargetObject name="technique_id=T1543,technique_name=Service Creation" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Services</TargetObject>
         <TargetObject name="technique_id=T1553.003,technique_name=SIP and Trust Provider Hijacking" condition="begin with">HKLM\SOFTWARE\Microsoft\Cryptography\OID</TargetObject>
