@@ -13,7 +13,7 @@ jobs:
         with:
          path: "ansible-role-sysmon"
       - name: Lint Ansible Playbook
-        uses: ansible/ansible-lint-action@main
+        uses: ansible-community/ansible-lint-action@main
         with:
           targets: "ansible-role-sysmon"
           override-deps: |
