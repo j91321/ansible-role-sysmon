@@ -41,7 +41,7 @@ sysmon_linux_config: linux_sysmonconfig.xml
 Dependencies
 ------------
 
-None
+- community.windows
 
 Example Playbook Windows
 ----------------
