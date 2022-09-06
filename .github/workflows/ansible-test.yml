@@ -16,7 +16,7 @@ jobs:
         with:
          path: "ansible-role-sysmon"
       - name: Install Windows Collection
-        run: ansible-galaxy collection install ansible.windows
+        run: ansible-galaxy collection install -p /usr/share/ansible/collections ansible.windows
       - name: Lint Ansible Playbook
         uses: ansible/ansible-lint-action@main
         with:
