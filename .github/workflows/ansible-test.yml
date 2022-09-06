@@ -19,6 +19,8 @@ jobs:
         run: ansible-galaxy collection install community.windows
       - name: Lint Ansible Playbook
         uses: ansible/ansible-lint-action@main
+        env:
+          ANSIBLE_LIBRARY: '/home/runner/.ansible/collections/'
         with:
           targets: "ansible-role-sysmon"
           override-deps: |
