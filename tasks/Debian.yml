@@ -1,35 +1,35 @@
 ---
 - name: (Debian/Ubuntu) Install dependencies
-  apt:
+  ansible.builtin.apt:
     name:
       - gnupg
       - apt-transport-https
     state: present
 
 - name: (Ubuntu) Download and install Microsoft repository from deb package
-  apt:
+  ansible.builtin.apt:
     deb: https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb
   tags: install
   when: ansible_distribution == "Ubuntu"
 
 - name: (Debian) Add Microsoft repository GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: "https://packages.microsoft.com/keys/microsoft.asc"
     state: present
   tags: install
   when: ansible_distribution == "Debian"
 
 - name: (Debian) Add Microsoft repository
-  apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_distribution_major_version }}/prod {{ ansible_distribution_release|lower }} main
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/debian/{{ ansible_distribution_major_version }}/prod {{ ansible_distribution_release | lower }} main
     filename: microsoft-prod.list
     state: present
   tags: install
   when: ansible_distribution == "Debian"
 
 - name: (Debian/Ubuntu) Install Sysmonforlinux package
-  apt:
+  ansible.builtin.apt:
     name: sysmonforlinux
-    update_cache: yes
+    update_cache: true
     state: present
   tags: install

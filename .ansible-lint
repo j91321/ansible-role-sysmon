@@ -2,3 +2,5 @@ exclude_paths:
   - .cache/
   - .github/
   - molecule/
+warn_list:
+  - yaml[line-length]
