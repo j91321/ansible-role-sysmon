@@ -17,7 +17,7 @@
     owner: root
     group: root
     mode: '0600'
-  notify: reload-linux-sysmon
+  notify: Reload-linux-sysmon
   tags: configure
 
 - name: (Linux) Install sysmon

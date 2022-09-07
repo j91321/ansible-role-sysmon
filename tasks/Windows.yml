@@ -91,7 +91,7 @@
   ansible.windows.win_copy:
     src: files/{{ sysmon_config }}
     dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
-  notify: reload-sysmon
+  notify: Reload-sysmon
   when: ansible_architecture == "32-bit"
   tags: configure
 
@@ -99,7 +99,7 @@
   ansible.windows.win_copy:
     src: files/{{ sysmon_config }}
     dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
-  notify: reload-sysmon64
+  notify: Reload-sysmon64
   when: ansible_architecture == "64-bit"
   tags: configure
 
@@ -110,7 +110,7 @@
   when:
     - ansible_architecture == "32-bit"
     - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
-  notify: restart-sysmon
+  notify: Restart-sysmon
 
 - name: (Windows) Install sysmon64
   ansible.windows.win_command: sysmon64 -i -accepteula
@@ -119,4 +119,4 @@
   when:
     - ansible_architecture == "64-bit"
     - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
-  notify: restart-sysmon64
+  notify: Restart-sysmon64
