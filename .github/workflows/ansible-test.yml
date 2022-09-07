@@ -20,7 +20,7 @@ jobs:
       - name: Lint Ansible Playbook
         uses: ansible-community/ansible-lint-action@v6.5.2
         env:
-          ANSIBLE_LIBRARY: '/home/runner/.ansible/collections/'
+          ANSIBLE_LIBRARY: '/home/runner/.ansible/collections/ansible_collections/'
         with:
           targets: "ansible-role-sysmon"
           override-deps: |
