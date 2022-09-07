@@ -28,5 +28,4 @@ galaxy_info:
     - monitoring
     - sysmon
 
-dependencies:
-  - community.windows
+dependencies: []
