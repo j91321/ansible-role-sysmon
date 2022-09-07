@@ -13,16 +13,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-         path: "ansible-role-sysmon"
       - name: Install Windows Collection
         run: ansible-galaxy collection install community.windows
       - name: Lint Ansible Playbook
         uses: ansible-community/ansible-lint-action@v6.5.2
-        with:
-          targets: "ansible-role-sysmon"
-          override-deps: |
-            rich>=9.5.1,<11.0.0
   
   test-linux:
     needs: lint
