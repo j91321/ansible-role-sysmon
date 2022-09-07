@@ -18,7 +18,7 @@ jobs:
       - name: Install Windows Collection
         run: ansible-galaxy collection install community.windows
       - name: Lint Ansible Playbook
-        uses: ansible/ansible-lint-action@main
+        uses: ansible-community/ansible-lint-action@v6.5.2
         env:
           ANSIBLE_LIBRARY: '/home/runner/.ansible/collections/'
         with:
