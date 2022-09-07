@@ -18,7 +18,7 @@
   when: ansible_architecture == "64-bit"
 
 - name: (Windows) Check sysmon version
-  win_file_version:
+  community.windows.win_file_version:
     path: "{{ sysmon_install_path }}\\Sysmon.exe"
   ignore_errors: yes
   register: sysmon_installed_version
@@ -27,7 +27,7 @@
     - sysmon_installed.exists
 
 - name: (Windows) Check sysmon64 version
-  win_file_version:
+  community.windows.win_file_version:
     path: "{{ sysmon_install_path }}\\Sysmon64.exe"
   ignore_errors: yes
   register: sysmon64_installed_version
