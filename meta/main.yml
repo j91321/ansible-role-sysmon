@@ -4,12 +4,12 @@ galaxy_info:
   author: Ján Trenčanský
   description: Install Sysmon on Windows and Linux. Rulesets included.
   license: MIT
-  min_ansible_version: 2.11
+  min_ansible_version: "2.11"
   platforms:
     - name: Windows
       versions:
-        - 2016
-        - 2019
+        - "2016"
+        - "2019"
     - name: Debian
       versions:
         - buster
@@ -20,7 +20,7 @@ galaxy_info:
         - focal
     - name: EL
       versions:
-        - 8
+        - "8"
   galaxy_tags:
     - security
     - windows
