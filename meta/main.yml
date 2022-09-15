@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: sysmon
+  namespace: j91321
   author: Ján Trenčanský
   description: Install Sysmon on Windows and Linux. Rulesets included.
   license: MIT
