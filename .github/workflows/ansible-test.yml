@@ -13,14 +13,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-         path: "ansible-role-sysmon"
+      - name: Install Windows Collection
+        run: ansible-galaxy collection install community.windows
       - name: Lint Ansible Playbook
-        uses: ansible/ansible-lint-action@main
-        with:
-          targets: "ansible-role-sysmon"
-          override-deps: |
-            rich>=9.5.1,<11.0.0
+        uses: ansible-community/ansible-lint-action@v6.5.2
   
   test-linux:
     needs: lint
@@ -40,7 +36,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: Run molecule tests
-        uses: robertdebock/molecule-action@2.6.1
+        uses: robertdebock/molecule-action@4.0.9
         with:
           image: "${{ matrix.image }}"
           namespace: geerlingguy

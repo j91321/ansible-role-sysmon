@@ -10,4 +10,3 @@
 
 - import_tasks: "Linux.yml"
   when: ansible_os_family != "Windows"
-

@@ -1,42 +1,42 @@
 - name: (Windows) Create installation directory
-  win_file:
+  ansible.windows.win_file:
     path: "{{ sysmon_install_path }}"
     state: directory
 
 - name: (Windows) Check if sysmon is installed
-  win_service:
+  ansible.windows.win_service:
     name: sysmon
   register: sysmon_installed
-  ignore_errors: yes
+  ignore_errors: true
   when: ansible_architecture == "32-bit"
 
 - name: (Windows) Check if sysmon64 is installed
-  win_service:
+  ansible.windows.win_service:
     name: sysmon64
   register: sysmon64_installed
-  ignore_errors: yes
+  ignore_errors: true
   when: ansible_architecture == "64-bit"
 
 - name: (Windows) Check sysmon version
-  win_file_version:
+  community.windows.win_file_version:
     path: "{{ sysmon_install_path }}\\Sysmon.exe"
-  ignore_errors: yes
+  ignore_errors: true
   register: sysmon_installed_version
   when:
     - ansible_architecture == "32-bit"
     - sysmon_installed.exists
 
 - name: (Windows) Check sysmon64 version
-  win_file_version:
+  community.windows.win_file_version:
     path: "{{ sysmon_install_path }}\\Sysmon64.exe"
-  ignore_errors: yes
+  ignore_errors: true
   register: sysmon64_installed_version
   when:
     - ansible_architecture == "64-bit"
     - sysmon64_installed.exists
 
 - name: (Windows) Uninstall sysmon
-  win_command: sysmon -u
+  ansible.windows.win_command: sysmon -u
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
@@ -45,7 +45,7 @@
     - sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Uninstall sysmon64
-  win_command: sysmon64 -u
+  ansible.windows.win_command: sysmon64 -u
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
@@ -54,7 +54,7 @@
     - sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Download Sysmon
-  win_get_url:
+  ansible.windows.win_get_url:
     url: "https://download.sysinternals.com/files/Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\Sysmon.zip"
   when:
@@ -62,16 +62,16 @@
     - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Unzip Sysmon
-  win_unzip:
+  community.windows.win_unzip:
     src: "{{ sysmon_install_path }}\\Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\"
-    delete_archive: yes
+    delete_archive: true
   when:
     - ansible_architecture == "32-bit"
     - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Download Sysmon64
-  win_get_url:
+  ansible.windows.win_get_url:
     url: "https://download.sysinternals.com/files/Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\Sysmon.zip"
   when:
@@ -79,44 +79,44 @@
     - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Unzip Sysmon64
-  win_unzip:
+  community.windows.win_unzip:
     src: "{{ sysmon_install_path }}\\Sysmon.zip"
     dest: "{{ sysmon_install_path }}\\"
-    delete_archive: yes
+    delete_archive: true
   when:
     - ansible_architecture == "64-bit"
     - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
 
 - name: (Windows) Upload sysmon configuration
-  win_copy:
+  ansible.windows.win_copy:
     src: files/{{ sysmon_config }}
     dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
-  notify: reload-sysmon
+  notify: Reload-sysmon
   when: ansible_architecture == "32-bit"
   tags: configure
 
 - name: (Windows) Upload sysmon64 configuration
-  win_copy:
+  ansible.windows.win_copy:
     src: files/{{ sysmon_config }}
     dest: "{{ sysmon_install_path }}\\sysmonconfig.xml"
-  notify: reload-sysmon64
+  notify: Reload-sysmon64
   when: ansible_architecture == "64-bit"
   tags: configure
 
 - name: (Windows) Install sysmon
-  win_command: sysmon -i -accepteula
+  ansible.windows.win_command: sysmon -i -accepteula
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "32-bit"
     - not sysmon_installed.exists or sysmon_installed_version.failed or sysmon_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
-  notify: restart-sysmon
+  notify: Restart-sysmon
 
 - name: (Windows) Install sysmon64
-  win_command: sysmon64 -i -accepteula
+  ansible.windows.win_command: sysmon64 -i -accepteula
   args:
     chdir: "{{ sysmon_install_path }}"
   when:
     - ansible_architecture == "64-bit"
     - not sysmon64_installed.exists or sysmon64_installed_version.failed or sysmon64_installed_version.win_file_version.product_version is version(sysmon_version, '<') # noqa 204
-  notify: restart-sysmon64
+  notify: Restart-sysmon64

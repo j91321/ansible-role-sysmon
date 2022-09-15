@@ -1,13 +1,14 @@
 ---
 - name: (CentOS) Add Microsoft repository
-  yum:
+  ansible.builtin.yum:
     name: https://packages.microsoft.com/config/centos/{{ ansible_distribution_major_version }}/packages-microsoft-prod.rpm
+    disable_gpg_check: true
     state: present
   when: ansible_distribution == 'CentOS'
   tags: install
 
 - name: (RHEL) Add Microsoft repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: "packages-microsoft-com-prod"
     description: "Microsoft repository"
     baseurl: https://packages.microsoft.com/rhel/{{ ansible_distribution_major_version }}/prod/
@@ -18,7 +19,7 @@
   tags: install
 
 - name: (RHEL/CentOS) Install sysmonforlinux package
-  yum:
+  ansible.builtin.yum:
     name: sysmonforlinux
     state: present
   when: ansible_os_family == "RedHat"
