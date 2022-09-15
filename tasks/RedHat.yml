@@ -1,4 +1,11 @@
 ---
+- name: (CentOS) Import Microsoft Key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://packages.microsoft.com/keys/microsoft.asc
+  when: ansible_distribution == 'CentOS'
+  tags: install
+
 - name: (CentOS) Add Microsoft repository
   ansible.builtin.yum:
     name: https://packages.microsoft.com/config/centos/{{ ansible_distribution_major_version }}/packages-microsoft-prod.rpm
