@@ -67,7 +67,7 @@ jobs:
         shell: powershell
       - name: Install Cryptography Package
         shell: msys2 {0}
-        run: pacman -S mingw-w64-x86_64-python-cryptography
+        run: pacman -S --noconfirm mingw-w64-x86_64-python-cryptography
       - name: Update pip and setuptools
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install --upgrade pip setuptools
