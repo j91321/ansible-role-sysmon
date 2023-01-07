@@ -69,16 +69,16 @@ jobs:
         shell: powershell
       - name: Ensure pip
         shell: wsl-bash {0}
-        run: python -m ensurepip
+        run: python3 -m ensurepip
       - name: Echo $PATH
         shell: wsl-bash {0}
         run: echo $PATH
       - name: Update pip and setuptools
         shell: wsl-bash {0}
-        run: python -m pip install --upgrade pip setuptools
+        run: python3 -m pip install --upgrade pip setuptools
       - name: Install Ansible
         shell: wsl-bash {0}
-        run: python -m pip install wheel setuptools-rust ansible pywinrm
+        run: python3 -m pip install wheel setuptools-rust ansible pywinrm
       - name: Run Ansible playbook
         shell: wsl-bash {0}
         run: |
