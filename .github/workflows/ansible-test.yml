@@ -71,7 +71,7 @@ jobs:
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m ensurepip
       - name: Echo $PATH
-        shell: mysys2 {0}
+        shell: msys2 {0}
         run: echo $PATH
       - name: Update pip and setuptools
         shell: msys2 {0}
