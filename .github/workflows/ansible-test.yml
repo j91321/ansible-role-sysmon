@@ -53,7 +53,7 @@ jobs:
           update: true
           install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel
           pacboy: >-
-            python-cryptography
+            python-cryptography:p
       - name: Download ConfigureRemotingForAnsible.ps1
         run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
         shell: powershell
@@ -70,12 +70,15 @@ jobs:
       - name: Ensure pip
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m ensurepip
+      - name: Echo $PATH
+        shell: mysys2 {0}
+        run: echo $PATH
       - name: Update pip and setuptools
         shell: msys2 {0}
-        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip3 install --upgrade pip setuptools
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install --upgrade pip setuptools
       - name: Install Ansible
         shell: msys2 {0}
-        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip3 install wheel setuptools-rust ansible pywinrm
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip install wheel setuptools-rust ansible pywinrm
       - name: Run Ansible playbook
         shell: msys2 {0}
         run: |
