@@ -52,6 +52,8 @@ jobs:
         with:
           update: true
           install: base-devel git gcc msys2-devel python3 python3-pip libffi libffi-devel libcrypt libcrypt-devel openssl openssl-devel
+          pacboy: >-
+            mingw-w64-x86_64-python-cryptography
       - name: Download ConfigureRemotingForAnsible.ps1
         run: wget https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1 -Outfile ConfigureRemotingForAnsible.ps1
         shell: powershell
@@ -65,9 +67,9 @@ jobs:
           Add-LocalGroupMember -Group Administrators -Member Ansible
           Enable-LocalUser -Name "Ansible"
         shell: powershell
-      - name: Install Cryptography Package
+      - name: Ensure pip
         shell: msys2 {0}
-        run: pacman -S --noconfirm mingw-w64-x86_64-python-cryptography
+        run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m ensurepip
       - name: Update pip and setuptools
         shell: msys2 {0}
         run: CFLAGS=-I/usr/lib/libffi-3.2.1/include python -m pip3 install --upgrade pip setuptools
